@@ -1,6 +1,13 @@
 package Scripts;
 import java.lang.Math;
 
+/*
+TODO
+make imagery
+create trails
+create sensing function
+*/
+
 class Simulation {
     public static void main(String[] args) {
         Agent[] agents = new Agent[Settings.AGENT_COUNT];
