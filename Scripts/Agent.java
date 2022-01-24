@@ -1,30 +1,30 @@
 package Scripts;
 
 class Agent {
-    private int x;
-    private int y;
-    private float ang;
-    public Agent(int x, int y, float ang) {
+    private double x;
+    private double y;
+    private double ang;
+    public Agent(double x, double y, double ang) {
         this.x = x;
         this.y = y;
         this.ang = ang;
     }
-    public int getx() {
+    public double getx() {
         return this.x;
     }
-    public void setx(int n) {
+    public void setx(double n) {
         this.x = n;
     }
-    public int gety() {
+    public double gety() {
         return this.y;
     }
-    public void sety(int n) {
+    public void sety(double n) {
         this.y = n;
     }
-    public float getang() {
+    public double getang() {
         return this.ang;
     }
-    public void setang(float n) {
+    public void setang(double n) {
         this.ang = n;
     }
 }
