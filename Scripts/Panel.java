@@ -22,14 +22,16 @@ class Screen extends JFrame {
 class Panel extends JPanel implements ActionListener {
     Timer timer;
     Agent[] agents;
-    HashMap<Point, Integer> trailMap = new HashMap<>();
-    Random rand = new Random();
+    HashMap<Point, Integer> trailMap;
+    Random rand;
     Panel() {
         this.setPreferredSize(new Dimension(Settings.WIDTH, Settings.HEIGHT));
         this.setBackground(Color.BLACK);
         timer = new Timer(10, this);
         timer.start();
         agents = new Agent[Settings.AGENT_COUNT];
+        trailMap = new HashMap<>();
+        rand = new Random();
         
         if (Settings.SPAWN_MODE == Spawn.RANDOM) {
             for (int c = 0; c < Settings.AGENT_COUNT; c++) {
@@ -37,6 +39,7 @@ class Panel extends JPanel implements ActionListener {
             }
         }
         
+        // agents[0] = new Agent(790, 400, 0);
         // agents[0] = new Agent(300, 400, 0);
         // agents[1] = new Agent(400, 280, Math.PI / 2);
     }
@@ -56,9 +59,6 @@ class Panel extends JPanel implements ActionListener {
         for(Point point: trailMap.keySet()) {
             g2D.drawLine(point.x, point.y, point.x, point.y);
             trailMap.put(point, trailMap.get(point) - 1);
-        }
-        for (Point point: trailMap.keySet()) {
-            if (trailMap.get(point) != 0) {continue;}
         }
         trailMap.keySet().removeIf(k -> trailMap.get(k) == 0);
     }
@@ -89,19 +89,18 @@ class Panel extends JPanel implements ActionListener {
         int weight_forward = sense(agent, 0);
         int weight_right = sense(agent, -Settings.SENSOR_OFFSET);
         int weight_left= sense(agent, Settings.SENSOR_OFFSET);
-        //double strength = Math.random();
         if (weight_forward > weight_right && weight_forward > weight_left) {
         } else if (weight_forward == weight_right) {
         } else if (weight_right > weight_left) {
-            agent.setang(agent.getang() - (rand.nextDouble() * Math.PI / 4));
+            agent.setang(agent.getang() - (rand.nextDouble() * Math.PI / 6));
         } else if (weight_left > weight_right) {
-            agent.setang(agent.getang() + (rand.nextDouble() * Math.PI / 4));
+            agent.setang(agent.getang() + (rand.nextDouble() * Math.PI / 6));
         }
     }
     public int sense(Agent agent, double offset) {
         double angle = agent.getang() + offset;
-        int center_x = (int)(agent.getx() + Settings.SENSOR_DST + Math.cos(angle));
-        int center_y = (int)(agent.gety() + Settings.SENSOR_DST + Math.sin(angle));
+        int center_x = (int)(agent.getx() + Settings.SENSOR_DST * Math.cos(angle));
+        int center_y = (int)(agent.gety() + Settings.SENSOR_DST * Math.sin(angle));
         int sum = 0;
         for (int x = -Settings.SENSOR_SIZE; x <= Settings.SENSOR_SIZE; x++) {
             for (int y = -Settings.SENSOR_SIZE; y <= Settings.SENSOR_SIZE; y++) {
