@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 class Screen extends JFrame {
     Panel panel;
@@ -30,6 +31,7 @@ class Panel extends JPanel implements ActionListener {
         }
     }
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
         int x = 0;
         int y = 0;
@@ -41,6 +43,16 @@ class Panel extends JPanel implements ActionListener {
             g2D.drawLine(x, y, x, y);
             move(ag);
         }
+        for(Integer[] point: trailMap.keySet()) {
+            g2D.drawLine(point[0], point[1], point[0], point[1]);
+            trailMap.put(point, trailMap.get(point) - 1);
+        }
+        ArrayList<Integer[]> temp = new ArrayList<Integer[]>();
+        for (Integer[] point: trailMap.keySet()) {
+            if (trailMap.get(point) != 0) {continue;}
+            temp.add(point);
+        }
+        trailMap.keySet().removeIf(k -> trailMap.get(k) == 0);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -59,7 +71,7 @@ class Panel extends JPanel implements ActionListener {
         }
         agent.setx(new_x); agent.sety(new_y); 
         Integer[] point = {(int)new_x, (int)new_y};
-        trailMap.put(point, Integer.valueOf(5));
+        trailMap.put(point, Integer.valueOf(Settings.TRAIL_LENGTH));
     }
     public void check(Agent agent) {
         int weight_forward = sense(agent, 0);
@@ -68,9 +80,9 @@ class Panel extends JPanel implements ActionListener {
         double strength = (double) Math.random();
         if (weight_forward >= weight_right && weight_forward >= weight_left) {
         } else if (weight_right > weight_left) {
-            agent.setang( -Math.PI / 6 * strength);
+            agent.setang(-Math.PI / 6 * strength);
         } else if (weight_left > weight_right) {
-            agent.setang( Math.PI / 6 * strength);
+            agent.setang(Math.PI / 6 * strength);
         }
     }
     public int sense(Agent agent, double offset) {
