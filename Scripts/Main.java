@@ -4,7 +4,6 @@ package Scripts;
 todo
 
 new spawn enums
-trail fading
 blurring?
 */
 
