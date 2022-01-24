@@ -20,7 +20,7 @@ class Screen extends JFrame {
 class Panel extends JPanel implements ActionListener {
     Timer timer;
     Agent[] agents;
-    HashMap<Point, Integer> trailMap;
+    HashMap<Point, Float> trailMap;
     Panel() {
         this.setPreferredSize(new Dimension(Settings.WIDTH, Settings.HEIGHT));
         this.setBackground(Settings.BACKGROUND);
@@ -67,6 +67,7 @@ class Panel extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
+        //blur();
         int x = 0;
         int y = 0;
         g2D.setPaint(Settings.AGENT_COLOR);
@@ -77,6 +78,7 @@ class Panel extends JPanel implements ActionListener {
             g2D.drawLine(x, y, x, y);
             move(ag);
         }
+        trailMap.keySet().removeIf(k -> trailMap.get(k) <= 0);
         AlphaComposite alpha;
         for(Point point: trailMap.keySet()) {
             alpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)trailMap.get(point) / (Settings.TRAIL_LENGTH + Settings.TRAIL_FADE));
@@ -84,7 +86,6 @@ class Panel extends JPanel implements ActionListener {
             g2D.drawLine(point.x, point.y, point.x, point.y);
             trailMap.put(point, trailMap.get(point) - 1);
         }
-        trailMap.keySet().removeIf(k -> trailMap.get(k) == 0);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -92,8 +93,7 @@ class Panel extends JPanel implements ActionListener {
     }
     public void move(Agent agent) {
         check(agent);
-        int temp_x = (int)agent.getx();
-        int temp_y = (int)agent.gety();
+        trailMap.put(new Point((int)agent.getx(), (int)agent.gety()), (float)Settings.TRAIL_LENGTH);
         double new_x = agent.getx() + Math.cos(agent.getang()) * Settings.AGENT_SPEED;
         double new_y = agent.gety() + Math.sin(agent.getang()) * Settings.AGENT_SPEED;
         if (new_x > Settings.WIDTH - (int)(Settings.AGENT_SIZE / 2) || new_x < Settings.AGENT_SIZE / 2 || new_y > Settings.HEIGHT - (int)(Settings.AGENT_SIZE / 2) || new_y < Settings.AGENT_SIZE / 2) {
@@ -102,17 +102,11 @@ class Panel extends JPanel implements ActionListener {
             agent.setang(Math.random() * 2 * Math.PI);
         }
         agent.setx(new_x); agent.sety(new_y); 
-        Point point = new Point(temp_x, temp_y);
-        if (trailMap.get(point) == null) {
-            trailMap.put(point, Integer.valueOf(Settings.TRAIL_LENGTH));
-        } else {
-            trailMap.put(point, Settings.TRAIL_LENGTH);
-        }
     }
     public void check(Agent agent) {
-        int weight_forward = sense(agent, 0);
-        int weight_right = sense(agent, -Settings.SENSOR_OFFSET);
-        int weight_left= sense(agent, Settings.SENSOR_OFFSET);
+        float weight_forward = sense(agent, 0);
+        float weight_right = sense(agent, -Settings.SENSOR_OFFSET);
+        float weight_left= sense(agent, Settings.SENSOR_OFFSET);
         if (weight_forward > weight_right && weight_forward > weight_left) {
         } else if (weight_forward == weight_right) {
         } else if (weight_right > weight_left) {
@@ -121,18 +115,45 @@ class Panel extends JPanel implements ActionListener {
             agent.setang(agent.getang() + (Math.random() * Settings.TURN_SPEED));
         }
     }
-    public int sense(Agent agent, double offset) {
+    public float sense(Agent agent, double offset) {
         double angle = agent.getang() + offset;
         int center_x = (int)(agent.getx() + Settings.SENSOR_DST * Math.cos(angle));
         int center_y = (int)(agent.gety() + Settings.SENSOR_DST * Math.sin(angle));
-        int sum = 0;
+        float sum = 0;
         for (int x = -Settings.SENSOR_SIZE; x <= Settings.SENSOR_SIZE; x++) {
             for (int y = -Settings.SENSOR_SIZE; y <= Settings.SENSOR_SIZE; y++) {
                 Point pos = new Point(center_x + x, center_y + y);
                 if (!trailMap.containsKey(pos)) {continue;}
-                sum += (int)trailMap.get(pos);
+                sum += trailMap.get(pos);
             }
         }
         return sum;
     }
+    /*
+    public void blur() {
+        HashMap<Point, Float> temp = new HashMap<>();
+        for (Point point: trailMap.keySet()) {
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    if (x < Settings.WIDTH && x >= 0 && y < Settings.HEIGHT && y >= 0 && !(x == 0 && y == 0)) {
+                        temp.put(new Point(x, y), trailMap.get(point) / 20);
+                    }
+                } // for y
+            } // for x
+        } // for point
+        for (Point point: temp.keySet()) {
+            if (!trailMap.containsKey(point)) {
+                trailMap.put(point, temp.get(point));
+            } else {
+                if (temp.get(point) + trailMap.get(point) > 1) {
+                    trailMap.put(point, 0.99f);
+                    System.out.print("if");
+                } else {
+                    trailMap.put(point, temp.get(point) + trailMap.get(point));
+                    System.out.print("else");
+                }
+            }
+        }
+    } // blur
+    */
 }
