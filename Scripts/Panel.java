@@ -1,24 +1,37 @@
 package Scripts;
-import java.lang.Math;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
-/*
-TODO
-make imagery
-create trails
-create sensing function
-*/
-
-class Simulation {
-    public static void main(String[] args) {
-        Agent[] agents = new Agent[Settings.AGENT_COUNT];
+class Panel extends JPanel implements ActionListener {
+    Timer timer;
+    Agent[] agents;
+    Panel() {
+        this.setPreferredSize(new Dimension(Settings.WIDTH, Settings.HEIGHT));
+        this.setBackground(Color.BLACK);
+        timer = new Timer(10, this);
+        timer.start();
+        agents = new Agent[Settings.AGENT_COUNT];
         for (int c = 0; c < Settings.AGENT_COUNT; c++) {
-            agents[c] = new Agent(0, 0, (float)Math.PI);
+            agents[c] = new Agent((int)(Math.random() * 500) + 10, (int)(Math.random() * 500) + 10, (float)Math.PI);
         }
-        System.out.print("All good\n");
+    }
+    public void paintComponent(Graphics g) {
+        Graphics2D g2D = (Graphics2D) g;
+        g2D.setPaint(Color.BLUE);
+        g2D.setStroke(new BasicStroke(Settings.AGENT_SIZE));
+        for (Agent agent: agents) {
+            //move(agent);
+            g2D.drawLine(agent.getx(), agent.gety(), agent.getx(), agent.gety());
+        }
+    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        repaint();
     }
     public void move(Agent agent) {
-        int x = agent.getx();
-        int y = agent.gety();
+        //int x = agent.getx();
+        //int y = agent.gety();
         double new_x = Math.cos(agent.getang()) * Settings.AGENT_SPEED;
         double new_y = Math.sin(agent.getang()) * Settings.AGENT_SPEED;
         if (new_x > Settings.WIDTH - Settings.AGENT_SIZE || new_x < Settings.AGENT_SIZE
@@ -47,4 +60,3 @@ class Simulation {
         return 0;
     }
 }
-
