@@ -27,7 +27,7 @@ class Panel extends JPanel implements ActionListener {
         timer.start();
         agents = new Agent[Settings.AGENT_COUNT];
         for (int c = 0; c < Settings.AGENT_COUNT; c++) {
-            agents[c] = new Agent((int)(Math.random() * 400) + 10, (int)(Math.random() * 400) + 10, Math.PI / 4);
+            agents[c] = new Agent((int)(Math.random() * 400) + 10, (int)(Math.random() * 400) + 10, Math.random() * 2 * Math.PI);
         }
     }
     public void paintComponent(Graphics g) {
@@ -59,8 +59,6 @@ class Panel extends JPanel implements ActionListener {
         repaint();
     }
     public void move(Agent agent) {
-        //int x = agent.getx();
-        //int y = agent.gety();
         double new_x = agent.getx() + Math.cos(agent.getang()) * Settings.AGENT_SPEED;
         double new_y = agent.gety() + Math.sin(agent.getang()) * Settings.AGENT_SPEED;
         double rand = Math.random();
