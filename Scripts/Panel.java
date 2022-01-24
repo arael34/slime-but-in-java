@@ -2,6 +2,10 @@ package Scripts;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Random;
+
+import Scripts.Settings.Spawn;
+
 import java.util.HashMap;
 
 class Screen extends JFrame {
@@ -19,14 +23,17 @@ class Panel extends JPanel implements ActionListener {
     Timer timer;
     Agent[] agents;
     HashMap<Point, Integer> trailMap = new HashMap<>();
+    Random rand = new Random();
     Panel() {
         this.setPreferredSize(new Dimension(Settings.WIDTH, Settings.HEIGHT));
         this.setBackground(Color.BLACK);
         timer = new Timer(10, this);
         timer.start();
         agents = new Agent[Settings.AGENT_COUNT];
-        for (int c = 0; c < Settings.AGENT_COUNT; c++) {
-            agents[c] = new Agent((int)(Math.random() * Settings.WIDTH - Settings.AGENT_SIZE) + Settings.AGENT_SIZE, (int)(Math.random() * Settings.HEIGHT - Settings.AGENT_SIZE) + Settings.AGENT_SIZE, Math.random() * 2 * Math.PI);
+        if (Settings.SPAWN_MODE == Spawn.RANDOM) {
+            for (int c = 0; c < Settings.AGENT_COUNT; c++) {
+                agents[c] = new Agent((int)(Math.random() * Settings.WIDTH - Settings.AGENT_SIZE) + Settings.AGENT_SIZE, (int)(Math.random() * Settings.HEIGHT - Settings.AGENT_SIZE) + Settings.AGENT_SIZE, rand.nextDouble() * 2 * Math.PI);
+            }
         }
     }
     public void paintComponent(Graphics g) {
@@ -61,11 +68,10 @@ class Panel extends JPanel implements ActionListener {
         int temp_y = (int)agent.gety();
         double new_x = agent.getx() + Math.cos(agent.getang()) * Settings.AGENT_SPEED;
         double new_y = agent.gety() + Math.sin(agent.getang()) * Settings.AGENT_SPEED;
-        double rand = Math.random();
         if (new_x > Settings.WIDTH - (int)(Settings.AGENT_SIZE / 2) || new_x < Settings.AGENT_SIZE / 2 || new_y > Settings.HEIGHT - (int)(Settings.AGENT_SIZE / 2) || new_y < Settings.AGENT_SIZE / 2) {
             new_x = Math.min(Settings.WIDTH - Settings.AGENT_SIZE / 2, Math.max(Settings.AGENT_SIZE / 2, new_x));
             new_y = Math.min(Settings.HEIGHT - Settings.AGENT_SIZE / 2, Math.max(Settings.AGENT_SIZE / 2, new_y));
-            agent.setang(rand * 2 * Math.PI);
+            agent.setang(rand.nextDouble() * 2 * Math.PI);
         }
         agent.setx(new_x); agent.sety(new_y); 
         Point point = new Point(temp_x, temp_y);
@@ -75,12 +81,12 @@ class Panel extends JPanel implements ActionListener {
         int weight_forward = sense(agent, 0);
         int weight_right = sense(agent, -Settings.SENSOR_OFFSET);
         int weight_left= sense(agent, Settings.SENSOR_OFFSET);
-        double strength = Math.random();
+        //double strength = Math.random();
         if (weight_forward >= weight_right && weight_forward >= weight_left) {
         } else if (weight_right > weight_left) {
-            agent.setang(agent.getang() + -(Math.PI * strength) / 6);
+            agent.setang(agent.getang() - Math.PI / 6);
         } else if (weight_left > weight_right) {
-            agent.setang(agent.getang() + Math.PI * strength / 6);
+            agent.setang(agent.getang() + Math.PI / 6);
         }
     }
     public int sense(Agent agent, double offset) {
