@@ -2,9 +2,8 @@ package Scripts;
 
 /*
 todo
-make imagery
-create trails
-create sensing function
+
+spawn enums
 */
 
 class Main {

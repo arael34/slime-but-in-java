@@ -5,7 +5,8 @@ class Settings {
         RANDOM,
         CIRCLE_IN,
         CIRCLE_OUT,
-        DONUT_IN
+        DONUT,
+        WATERFALL
     }
     final static int AGENT_COUNT = 1000;
     final static int AGENT_SPEED = 1;
