@@ -21,7 +21,7 @@ class Settings {
         WATERFALL
     }
     final static int FPS = 144;
-    final static int AGENT_COUNT = 3000;
+    final static int AGENT_COUNT = 2000;
     final static int AGENT_SPEED = 1;
     final static int AGENT_SIZE = 1;
     final static Color AGENT_COLOR = Color.PINK;
