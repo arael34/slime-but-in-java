@@ -40,6 +40,28 @@ class Panel extends JPanel implements ActionListener {
                 radius = Math.random() * (Math.min(Settings.WIDTH, Settings.HEIGHT) / 2 - Settings.AGENT_SIZE);
                 agents[c] = new Agent(Math.cos(angle) * radius + Settings.WIDTH / 2, Math.sin(angle) * radius + Settings.HEIGHT / 2, angle + Math.PI);
             }
+        } else if (Settings.SPAWN_MODE == Spawn.CIRCLE_OUT) {
+            double angle;
+            double radius;
+            for (int c = 0; c < Settings.AGENT_COUNT; c++) {
+                angle = Math.random() * 2 * Math.PI;
+                radius = Math.random() * (Math.min(Settings.WIDTH, Settings.HEIGHT) / 2 - Settings.AGENT_SIZE);
+                agents[c] = new Agent(Math.cos(angle) * radius + Settings.WIDTH / 2, Math.sin(angle) * radius + Settings.HEIGHT / 2, angle);
+            }
+        } else if (Settings.SPAWN_MODE == Spawn.DONUT) {
+            double angle;
+            double radius;
+            int min;
+            for (int c = 0; c < Settings.AGENT_COUNT; c++) {
+                angle = Math.random() * 2 * Math.PI;
+                min = Math.min(Settings.WIDTH, Settings.HEIGHT);
+                radius = Math.random() * (min / 2 - Settings.AGENT_SIZE - min / 4) + min / 4;
+                agents[c] = new Agent(Math.cos(angle) * radius + Settings.WIDTH / 2, Math.sin(angle) * radius + Settings.HEIGHT / 2, angle + Math.PI);
+            }
+        } else if (Settings.SPAWN_MODE == Spawn.WATERFALL) {
+            for (int c = 0; c < Settings.AGENT_COUNT; c++) {
+                agents[c] = new Agent((Math.random() * Settings.WIDTH - Settings.AGENT_SIZE) + Settings.AGENT_SIZE, (Math.random() * Settings.HEIGHT - Settings.AGENT_SIZE) + Settings.AGENT_SIZE, Math.PI / 2);
+            }
         }
     }
     public void paintComponent(Graphics g) {
@@ -91,9 +113,9 @@ class Panel extends JPanel implements ActionListener {
         if (weight_forward > weight_right && weight_forward > weight_left) {
         } else if (weight_forward == weight_right) {
         } else if (weight_right > weight_left) {
-            agent.setang(agent.getang() - (Math.random() * Math.PI / 6));
+            agent.setang(agent.getang() - (Math.random() * Settings.TURN_SPEED));
         } else if (weight_left > weight_right) {
-            agent.setang(agent.getang() + (Math.random() * Math.PI / 6));
+            agent.setang(agent.getang() + (Math.random() * Settings.TURN_SPEED));
         }
     }
     public int sense(Agent agent, double offset) {

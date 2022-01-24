@@ -3,7 +3,9 @@ package Scripts;
 /*
 todo
 
-spawn enums
+new spawn enums
+trail fading
+blurring?
 */
 
 class Main {
