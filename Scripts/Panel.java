@@ -30,7 +30,15 @@ class Panel extends JPanel implements ActionListener {
         trailMap = new HashMap<>();
         if (Settings.SPAWN_MODE == Spawn.RANDOM) {
             for (int c = 0; c < Settings.AGENT_COUNT; c++) {
-                agents[c] = new Agent((int)(Math.random() * Settings.WIDTH - Settings.AGENT_SIZE) + Settings.AGENT_SIZE, (int)(Math.random() * Settings.HEIGHT - Settings.AGENT_SIZE) + Settings.AGENT_SIZE, Math.random() * 2 * Math.PI);
+                agents[c] = new Agent((Math.random() * Settings.WIDTH - Settings.AGENT_SIZE) + Settings.AGENT_SIZE, (Math.random() * Settings.HEIGHT - Settings.AGENT_SIZE) + Settings.AGENT_SIZE, Math.random() * 2 * Math.PI);
+            }
+        } else if (Settings.SPAWN_MODE == Spawn.CIRCLE_IN) {
+            double angle;
+            double radius;
+            for (int c = 0; c < Settings.AGENT_COUNT; c++) {
+                angle = Math.random() * 2 * Math.PI;
+                radius = Math.random() * (Math.min(Settings.WIDTH, Settings.HEIGHT) / 2 - Settings.AGENT_SIZE);
+                agents[c] = new Agent(Math.cos(angle) * radius + Settings.WIDTH / 2, Math.sin(angle) * radius + Settings.HEIGHT / 2, angle + Math.PI);
             }
         }
     }

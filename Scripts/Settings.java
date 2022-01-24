@@ -17,5 +17,5 @@ class Settings {
     final static int SENSOR_SIZE = 3; 
     final static int SENSOR_DST = 4;
     final static double SENSOR_OFFSET = 0.3;
-    final static Spawn SPAWN_MODE = Spawn.RANDOM;
+    final static Spawn SPAWN_MODE = Spawn.CIRCLE_IN;
 }
