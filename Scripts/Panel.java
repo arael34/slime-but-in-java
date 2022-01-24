@@ -23,7 +23,7 @@ class Panel extends JPanel implements ActionListener {
     HashMap<Point, Integer> trailMap;
     Panel() {
         this.setPreferredSize(new Dimension(Settings.WIDTH, Settings.HEIGHT));
-        this.setBackground(Color.BLACK);
+        this.setBackground(Settings.BACKGROUND);
         timer = new Timer(10, this);
         timer.start();
         agents = new Agent[Settings.AGENT_COUNT];
@@ -69,7 +69,7 @@ class Panel extends JPanel implements ActionListener {
         Graphics2D g2D = (Graphics2D) g;
         int x = 0;
         int y = 0;
-        g2D.setPaint(Color.BLUE);
+        g2D.setPaint(Settings.AGENT_COLOR);
         g2D.setStroke(new BasicStroke(Settings.AGENT_SIZE));
         for (Agent ag: agents) {
             x = (int)ag.getx();
@@ -77,7 +77,10 @@ class Panel extends JPanel implements ActionListener {
             g2D.drawLine(x, y, x, y);
             move(ag);
         }
+        AlphaComposite alpha;
         for(Point point: trailMap.keySet()) {
+            alpha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)trailMap.get(point) / (Settings.TRAIL_LENGTH + Settings.TRAIL_FADE));
+            g2D.setComposite(alpha);
             g2D.drawLine(point.x, point.y, point.x, point.y);
             trailMap.put(point, trailMap.get(point) - 1);
         }

@@ -1,4 +1,5 @@
 package Scripts;
+import java.awt.Color;
 
 class Settings {
     enum Spawn {
@@ -8,15 +9,18 @@ class Settings {
         DONUT,
         WATERFALL
     }
-    final static int AGENT_COUNT = 1000;
+    final static int AGENT_COUNT = 3000;
     final static int AGENT_SPEED = 1;
     final static int AGENT_SIZE = 1;
-    final static int WIDTH = 400;
-    final static int HEIGHT = 400;
+    final static Color AGENT_COLOR = Color.PINK;
+    final static double TURN_SPEED = Math.PI / 6;
+    final static int TRAIL_FADE = 50;
     final static int TRAIL_LENGTH = 200;
+    final static int WIDTH = 800;
+    final static int HEIGHT = 800;
     final static int SENSOR_SIZE = 3; 
     final static int SENSOR_DST = 4;
     final static double SENSOR_OFFSET = 0.3;
-    final static double TURN_SPEED = Math.PI / 6;
-    final static Spawn SPAWN_MODE = Spawn.WATERFALL;
+    final static Spawn SPAWN_MODE = Spawn.CIRCLE_IN;
+    final static Color BACKGROUND = Color.BLACK;
 }
