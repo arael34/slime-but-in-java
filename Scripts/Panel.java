@@ -24,7 +24,7 @@ class Panel extends JPanel implements ActionListener {
     Panel() {
         this.setPreferredSize(new Dimension(Settings.WIDTH, Settings.HEIGHT));
         this.setBackground(Settings.BACKGROUND);
-        timer = new Timer(10, this);
+        timer = new Timer((int)(1000 / Settings.FPS) + 1, this);
         timer.start();
         agents = new Agent[Settings.AGENT_COUNT];
         trailMap = new HashMap<>();
