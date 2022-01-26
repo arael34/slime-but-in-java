@@ -20,7 +20,7 @@ class Main {
         POINT
     }
     final static int FPS = 60;
-    final static int AGENT_COUNT = 1000;
+    final static int AGENT_COUNT = 3000;
     final static int AGENT_SPEED = 1;
     final static int AGENT_SIZE = 1;
     final static Color AGENT_COLOR = Color.PINK;
@@ -32,6 +32,6 @@ class Main {
     final static int SENSOR_SIZE = 2; 
     final static int SENSOR_DST = 3;
     final static double SENSOR_OFFSET = 0.3;
-    final static Spawn SPAWN_MODE = Spawn.RANDOM;
+    final static Spawn SPAWN_MODE = Spawn.CIRCLE_IN;
     final static Color BACKGROUND = Color.BLACK;
 }
