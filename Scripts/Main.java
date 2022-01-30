@@ -19,8 +19,12 @@ class Main {
         WATERFALL,
         POINT
     }
-    final static int FPS = 60;
-    final static int AGENT_COUNT = 1000;
+    enum EdgeType {
+        BOUNCE,
+        ROTATE
+    }
+    final static int FPS = 144;
+    final static int AGENT_COUNT = 500;
     final static int AGENT_SPEED = 1;
     final static int AGENT_SIZE = 1;
     final static Color AGENT_COLOR = Color.PINK;
@@ -29,9 +33,10 @@ class Main {
     final static int TRAIL_LENGTH = 200;
     final static int WIDTH = 500;
     final static int HEIGHT = 500;
-    final static int SENSOR_SIZE = 2; 
+    final static int SENSOR_SIZE = 1; 
     final static int SENSOR_DST = 3;
     final static double SENSOR_OFFSET = 0.3;
-    final static Spawn SPAWN_MODE = Spawn.CIRCLE_OUT;
+    final static Spawn SPAWN_MODE = Spawn.WATERFALL;
     final static Color BACKGROUND = Color.BLACK;
+    final static EdgeType EDGE = EdgeType.BOUNCE;
 }

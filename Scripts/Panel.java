@@ -2,6 +2,8 @@ package Scripts;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import Scripts.Main.EdgeType;
 import Scripts.Main.Spawn;
 import java.util.HashMap;
 
@@ -88,22 +90,23 @@ class Panel extends JPanel implements ActionListener {
         trailMap.put(new Point((int)agent.getx(), (int)agent.gety()), (float)Main.TRAIL_LENGTH);
         double new_x = agent.getx() + Math.cos(agent.getang()) * Main.AGENT_SPEED;
         double new_y = agent.gety() + Math.sin(agent.getang()) * Main.AGENT_SPEED;
-        /*
-        if (new_x > Main.WIDTH - (int)(Main.AGENT_SIZE / 2) || new_x < Main.AGENT_SIZE / 2 || new_y > Main.HEIGHT - (int)(Main.AGENT_SIZE / 2) || new_y < Main.AGENT_SIZE / 2) {
-            new_x = Math.min(Main.WIDTH - Main.AGENT_SIZE / 2, Math.max(Main.AGENT_SIZE / 2, new_x));
-            new_y = Math.min(Main.HEIGHT - Main.AGENT_SIZE / 2, Math.max(Main.AGENT_SIZE / 2, new_y));
-            agent.setang(Math.random() * 2 * Math.PI);
-        }
-        */
-        if (new_x > Main.WIDTH - (int)(Main.AGENT_SIZE / 2)) {
-            new_x = Main.AGENT_SIZE / 2;
-        } else if (new_x < Main.AGENT_SIZE / 2) {
-            new_x = Main.WIDTH - (int)(Main.AGENT_SIZE / 2);
-        }
-        if (new_y > Main.HEIGHT - (int)(Main.AGENT_SIZE / 2)) {
-            new_y = Main.AGENT_SIZE / 2;
-        } else if (new_y < Main.AGENT_SIZE / 2) {
-            new_y = Main.HEIGHT - (int)(Main.AGENT_SIZE / 2);
+        if (Main.EDGE == EdgeType.BOUNCE) {
+            if (new_x > Main.WIDTH - (int)(Main.AGENT_SIZE / 2) || new_x < Main.AGENT_SIZE / 2 || new_y > Main.HEIGHT - (int)(Main.AGENT_SIZE / 2) || new_y < Main.AGENT_SIZE / 2) {
+                new_x = Math.min(Main.WIDTH - Main.AGENT_SIZE / 2, Math.max(Main.AGENT_SIZE / 2, new_x));
+                new_y = Math.min(Main.HEIGHT - Main.AGENT_SIZE / 2, Math.max(Main.AGENT_SIZE / 2, new_y));
+                agent.setang(Math.random() * 2 * Math.PI);
+            }
+        } else if (Main.EDGE == EdgeType.ROTATE) {
+            if (new_x > Main.WIDTH - (int)(Main.AGENT_SIZE / 2)) {
+                new_x = Main.AGENT_SIZE / 2;
+            } else if (new_x < Main.AGENT_SIZE / 2) {
+                new_x = Main.WIDTH - (int)(Main.AGENT_SIZE / 2);
+            }
+            if (new_y > Main.HEIGHT - (int)(Main.AGENT_SIZE / 2)) {
+                new_y = Main.AGENT_SIZE / 2;
+            } else if (new_y < Main.AGENT_SIZE / 2) {
+                new_y = Main.HEIGHT - (int)(Main.AGENT_SIZE / 2);
+            }
         }
         agent.setx(new_x); agent.sety(new_y); 
     }
